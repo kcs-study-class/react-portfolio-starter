@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { useTheme } from './hooks/useTheme'
 import ScrollToTop from './components/ScrollToTop'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
@@ -21,11 +22,6 @@ function HomePage() {
       <GameJams />
       <Certifications />
       <Contact />
-      <footer className="footer">
-        <div className="container">
-          <p>© 2026 Taro Yamada — Built with React + Vite</p>
-        </div>
-      </footer>
     </>
   )
 }
@@ -43,6 +39,7 @@ export default function App() {
           <Route path="/works/:id" element={<WorkDetail />} />
         </Routes>
       </main>
+      <Footer />
     </>
   )
 }

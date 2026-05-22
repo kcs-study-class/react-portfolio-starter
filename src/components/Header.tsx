@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { profile } from '../data/portfolio'
 
 interface Props {
@@ -7,27 +8,30 @@ interface Props {
 
 export default function Header({ theme, onThemeToggle }: Props) {
   const navItems = [
-    { label: 'About', href: '#about' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Works', href: '#works' },
-    { label: 'Jams', href: '#gamejams' },
-    { label: 'Certs', href: '#certifications' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'About', hash: 'about' },
+    { label: 'Skills', hash: 'skills' },
+    { label: 'Works', hash: 'works' },
+    { label: 'Jams', hash: 'gamejams' },
+    { label: 'Certs', hash: 'certifications' },
+    { label: 'Contact', hash: 'contact' },
   ]
 
   return (
     <header className="header">
       <div className="container">
         <div className="header-inner">
-          <a href="#hero" className="header-logo">
+          {/* ロゴ: 常にホームへ戻る */}
+          <Link to="/" className="header-logo">
             {profile.nameEn.split(' ')[0]}
             <span>.</span>
-          </a>
+          </Link>
           <nav>
             <ul className="header-nav">
               {navItems.map((item) => (
                 <li key={item.label}>
-                  <a href={item.href}>{item.label}</a>
+                  {/* "/#about" 形式で指定すれば、サブページからもホーム→該当セクションへ遷移できる
+                      （ScrollToTop が hash を見てスクロールする） */}
+                  <Link to={`/#${item.hash}`}>{item.label}</Link>
                 </li>
               ))}
             </ul>
