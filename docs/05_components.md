@@ -15,6 +15,7 @@ import { Routes, Route } from 'react-router-dom'
 import { useTheme } from './hooks/useTheme'
 import ScrollToTop from './components/ScrollToTop'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
@@ -34,11 +35,6 @@ function HomePage() {
       <GameJams />
       <Certifications />
       <Contact />
-      <footer className="footer">
-        <div className="container">
-          <p>© 2026 山田太郎 — Built with React + Vite</p>
-        </div>
-      </footer>
     </>
   )
 }
@@ -56,6 +52,7 @@ export default function App() {
           <Route path="/works/:id" element={<WorkDetail />} />
         </Routes>
       </main>
+      <Footer />
     </>
   )
 }
@@ -65,6 +62,7 @@ export default function App() {
 - `HomePage` は一覧ページのセクション構成だけを管理します
 - `WorkDetail` は別ルート（`/works/:id`）で表示します
 - `useTheme` フックで取得した `toggle` を `Header` に渡します
+- **`Header` と `Footer` は `<Routes>` の外側** に置いているので、ホームでも作品詳細ページでも常に表示されます
 
 ---
 
@@ -137,6 +135,7 @@ Props を受け取るコンポーネントには `interface` で型を定義し�
 
 ```tsx
 // src/components/Header.tsx
+import { Link } from 'react-router-dom'
 import { profile } from '../data/portfolio'
 
 interface Props {
@@ -146,26 +145,28 @@ interface Props {
 
 export default function Header({ theme, onThemeToggle }: Props) {
   const navItems = [
-    { label: 'About', href: '#about' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Works', href: '#works' },
-    { label: 'Jams', href: '#gamejams' },
-    { label: 'Certs', href: '#certifications' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'About', hash: 'about' },
+    { label: 'Skills', hash: 'skills' },
+    { label: 'Works', hash: 'works' },
+    { label: 'Jams', hash: 'gamejams' },
+    { label: 'Certs', hash: 'certifications' },
+    { label: 'Contact', hash: 'contact' },
   ]
 
   return (
     <header className="header">
       <div className="container">
         <div className="header-inner">
-          <a href="#hero" className="header-logo">
+          {/* ロゴ: 常にホームへ戻る */}
+          <Link to="/" className="header-logo">
             {profile.nameEn.split(' ')[0]}<span>.</span>
-          </a>
+          </Link>
           <nav>
             <ul className="header-nav">
               {navItems.map((item) => (
                 <li key={item.label}>
-                  <a href={item.href}>{item.label}</a>
+                  {/* "/#about" 形式で指定すれば、作品詳細ページからもホーム→該当セクションへ遷移できる */}
+                  <Link to={`/#${item.hash}`}>{item.label}</Link>
                 </li>
               ))}
             </ul>
@@ -188,6 +189,34 @@ export default function Header({ theme, onThemeToggle }: Props) {
 - `interface Props` で受け取れる値の型を定義します
 - `navItems` を配列で定義して `map()` で生成することで、項目の追加・削除がしやすくなります
 - `theme` と `onThemeToggle` は `App.tsx` から Props で受け取ります
+- **`<a href="#about">` ではなく `<Link to="/#about">` を使う理由**：素の `<a href="#about">` は **同じページ内** のアンカーへのジャンプしかできません。作品詳細ページ (`/works/1`) でこれを押しても `/works/1#about` になり、そのページに `#about` 要素が無いので何も起こりません。`<Link to="/#about">` を使うと **「`/` に遷移してから `#about` 要素までスクロール」** という挙動になり、どのページからでもナビゲートできます（hash 検出スクロールは `ScrollToTop` が担当）
+
+---
+
+## Footer — 全ページ共通フッター
+
+`<Routes>` の外に置くことで、ホーム・作品詳細ページの両方に同じフッターが表示されます。
+
+```tsx
+// src/components/Footer.tsx
+import { profile } from '../data/portfolio'
+
+export default function Footer() {
+  const year = new Date().getFullYear()
+
+  return (
+    <footer className="footer">
+      <div className="container">
+        <p>© {year} {profile.nameEn} — Built with React + Vite</p>
+      </div>
+    </footer>
+  )
+}
+```
+
+**ポイント**:
+- `new Date().getFullYear()` で **現在の年を自動取得**。手書きの `2026` だと年が変わるたびに修正が必要になりますが、これなら毎年自動更新されます
+- 名前は `profile.nameEn` を `import` して使っているので、データを 1 箇所変えればフッターも反映されます
 
 ---
 
