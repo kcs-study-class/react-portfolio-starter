@@ -80,6 +80,14 @@ export interface TimelineItem {
   event: string
 }
 
+export const CATEGORY_EMOJI: Record<string, string> = {
+  game: '🎮',
+  web: '🌐',
+  '3d': '🧊',
+}
+
+export const CATEGORY_EMOJI_FALLBACK = '📁'
+
 export const profile: Profile = {
   name: '山田 太郎',
   nameEn: 'Taro Yamada',

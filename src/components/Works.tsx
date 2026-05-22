@@ -1,34 +1,21 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { works, type Work } from '../data/portfolio'
-
-const CATEGORY_EMOJI: Record<string, string> = {
-  game: '🎮',
-  web: '🌐',
-  '3d': '🧊',
-}
-
-function WorkThumbnail({ work }: { work: Work }) {
-  const [failed, setFailed] = useState(false)
-  const emoji = CATEGORY_EMOJI[work.category] ?? '📁'
-
-  if (work.thumbnail && !failed) {
-    return (
-      <img
-        src={work.thumbnail}
-        alt={work.title}
-        onError={() => setFailed(true)}
-      />
-    )
-  }
-  return <span>{emoji}</span>
-}
+import {
+  works,
+  CATEGORY_EMOJI,
+  CATEGORY_EMOJI_FALLBACK,
+  type Work,
+} from '../data/portfolio'
+import SafeImg from './SafeImg'
 
 function WorkCard({ work }: { work: Work }) {
   return (
     <article className="work-card">
       <div className="work-thumbnail">
-        <WorkThumbnail work={work} />
+        <SafeImg
+          src={work.thumbnail}
+          alt={work.title}
+          fallback={CATEGORY_EMOJI[work.category] ?? CATEGORY_EMOJI_FALLBACK}
+        />
       </div>
 
       <div className="work-body">

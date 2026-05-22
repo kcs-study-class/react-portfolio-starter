@@ -258,6 +258,31 @@ export const timeline: TimelineItem[] = [
 
 ---
 
+## 7. カテゴリ別の絵文字（共通定数）
+
+Works 一覧と作品詳細ページの両方で、画像が無い作品にカテゴリ別の絵文字を出します。  
+同じ対応表を2箇所に書くのは間違いの元なので、データファイルに一度だけ定義します。
+
+```ts
+export const CATEGORY_EMOJI: Record<string, string> = {
+  game: '🎮',
+  web: '🌐',
+  '3d': '🧊',
+}
+
+export const CATEGORY_EMOJI_FALLBACK = '📁'
+```
+
+**ポイント**:
+- `Record<string, string>` は「キーが文字列、値が文字列のオブジェクト」を表す型です
+- 想定外のカテゴリが来たときに備えて `CATEGORY_EMOJI_FALLBACK` を別に用意します
+- 呼び出し側では `CATEGORY_EMOJI[work.category] ?? CATEGORY_EMOJI_FALLBACK` で安全に取り出せます
+
+> **なぜデータファイルに置く？**  
+> 絵文字は「見た目」なのでコンポーネントに書きたくなりますが、**カテゴリと絵文字の対応** は作品データ（`category` フィールド）と一緒に管理した方が一貫性があります。新しいカテゴリを追加するときも、ここ1箇所だけ直せばOKです。
+
+---
+
 ## null の扱い
 
 データがない項目は `null` または空配列 `[]` にします。コンポーネント側で `{value && <表示>}` と書けば、`null` のときは自動で非表示になります。

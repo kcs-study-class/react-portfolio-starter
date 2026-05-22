@@ -1,26 +1,11 @@
-import { useState } from 'react'
 import { useParams, Link, Navigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
-import { works } from '../data/portfolio'
-
-const CATEGORY_EMOJI: Record<string, string> = {
-  game: '🎮',
-  web: '🌐',
-  '3d': '🧊',
-}
-
-interface SafeImgProps {
-  src: string
-  alt: string
-  className?: string
-  fallback: string
-}
-
-function SafeImg({ src, alt, className, fallback }: SafeImgProps) {
-  const [failed, setFailed] = useState(false)
-  if (failed) return <span>{fallback}</span>
-  return <img src={src} alt={alt} className={className} onError={() => setFailed(true)} />
-}
+import {
+  works,
+  CATEGORY_EMOJI,
+  CATEGORY_EMOJI_FALLBACK,
+} from '../data/portfolio'
+import SafeImg from '../components/SafeImg'
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -46,6 +31,8 @@ export default function WorkDetail() {
 
   if (!work) return <Navigate to="/" replace />
 
+  const categoryEmoji = CATEGORY_EMOJI[work.category] ?? CATEGORY_EMOJI_FALLBACK
+
   return (
     <div className="wd-page">
       <div className="container">
@@ -54,9 +41,7 @@ export default function WorkDetail() {
 
         <div className="wd-hero">
           <div className="wd-hero-thumbnail">
-            {work.thumbnail
-              ? <SafeImg src={work.thumbnail} alt={work.title} fallback={CATEGORY_EMOJI[work.category] ?? '📁'} />
-              : <span>{CATEGORY_EMOJI[work.category] ?? '📁'}</span>}
+            <SafeImg src={work.thumbnail} alt={work.title} fallback={categoryEmoji} />
           </div>
           <div className="wd-hero-info">
             <p className="work-category-badge">{work.genre}</p>

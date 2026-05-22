@@ -403,20 +403,76 @@ export default function Skills() {
 
 ---
 
+## SafeImg — 画像表示の共通コンポーネント
+
+Works 一覧と WorkDetail の両方で **「画像が無い／読み込みに失敗したら絵文字を出す」** という同じ処理が必要になります。  
+同じコードを2箇所に書く（コピペする）と、片方を直したときにもう片方を直し忘れる **バグの温床** になります。  
+共通のコンポーネントとして切り出しましょう。
+
+```tsx
+// src/components/SafeImg.tsx
+import { useState } from 'react'
+
+interface Props {
+  src: string | null
+  alt: string
+  className?: string
+  fallback: string
+}
+
+export default function SafeImg({ src, alt, className, fallback }: Props) {
+  const [failed, setFailed] = useState(false)
+
+  // src が null、または読み込みに失敗したらフォールバックを表示
+  if (!src || failed) return <span>{fallback}</span>
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      onError={() => setFailed(true)}
+    />
+  )
+}
+```
+
+**ポイント**:
+- `src` を `string | null` にして、`null`（画像未設定）も読み込み失敗もまとめて1つの分岐で処理できます
+- `onError` は `<img>` の読み込みが失敗したとき（404、ネットワークエラーなど）に発火するイベントです
+- `useState(false)` で「失敗したかどうか」を覚えておき、失敗後は再度読み込まないようにします
+- `className?` の `?` は **省略可能** という意味です（呼び出し側で渡さなくてもOK）
+
+> **DRY原則**: Don't Repeat Yourself（同じことを繰り返すな）。  
+> 同じロジックが2箇所以上に出てきたら、共通化を検討するサインです。
+
+---
+
 ## Works — 制作物一覧
 
-`WorkCard` を子コンポーネントに分離します。詳細ページへは `<Link>` で遷移します。
+`WorkCard` を子コンポーネントに分離します。詳細ページへは `<Link>` で遷移します。  
+サムネイル画像は先ほど作った `SafeImg` を使い、カテゴリ別の絵文字（`CATEGORY_EMOJI`）は `portfolio.ts` から `import` します。
 
 ```tsx
 // src/components/Works.tsx
 import { Link } from 'react-router-dom'
-import { works, type Work } from '../data/portfolio'
+import {
+  works,
+  CATEGORY_EMOJI,
+  CATEGORY_EMOJI_FALLBACK,
+  type Work,
+} from '../data/portfolio'
+import SafeImg from './SafeImg'
 
 function WorkCard({ work }: { work: Work }) {
   return (
     <article className="work-card">
       <div className="work-thumbnail">
-        {work.thumbnail ? <img src={work.thumbnail} alt={work.title} /> : '🎮'}
+        <SafeImg
+          src={work.thumbnail}
+          alt={work.title}
+          fallback={CATEGORY_EMOJI[work.category] ?? CATEGORY_EMOJI_FALLBACK}
+        />
       </div>
       <div className="work-body">
         <p className="work-category-badge">{work.genre}</p>
@@ -480,7 +536,12 @@ export default function Works() {
 // src/pages/WorkDetail.tsx
 import { useParams, Link, Navigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
-import { works } from '../data/portfolio'
+import {
+  works,
+  CATEGORY_EMOJI,
+  CATEGORY_EMOJI_FALLBACK,
+} from '../data/portfolio'
+import SafeImg from '../components/SafeImg'
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -507,6 +568,9 @@ export default function WorkDetail() {
   // 存在しないIDならトップに戻す
   if (!work) return <Navigate to="/" replace />
 
+  // 2回使うので変数化（同じ式を繰り返さない）
+  const categoryEmoji = CATEGORY_EMOJI[work.category] ?? CATEGORY_EMOJI_FALLBACK
+
   return (
     <div className="wd-page">
       <div className="container">
@@ -514,7 +578,7 @@ export default function WorkDetail() {
 
         <div className="wd-hero">
           <div className="wd-hero-thumbnail">
-            {work.thumbnail ? <img src={work.thumbnail} alt={work.title} /> : <span>🎮</span>}
+            <SafeImg src={work.thumbnail} alt={work.title} fallback={categoryEmoji} />
           </div>
           <div className="wd-hero-info">
             <p className="work-category-badge">{work.genre}</p>
@@ -556,6 +620,7 @@ export default function WorkDetail() {
 - `works.find((w) => w.id === Number(id))` でURLの文字列 `'1'` を数値 `1` に変換して検索します
 - `ReactNode` 型は「JSXとして表示できるもの全般」を表します。`children` の型によく使います
 - `MetaRow` の `value` が `string | undefined` なのは `platform?.join(...)` が undefined を返し得るためです
+- サムネイル表示は `SafeImg` に任せているので、`work.thumbnail` が `null` でも自動でフォールバックの絵文字が出ます。同じロジックを Works.tsx と二重に書く必要がありません
 
 ---
 
