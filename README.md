@@ -1,10 +1,10 @@
 # React ポートフォリオ スターターキット
 ### 専門学校生向け：ゲーム・クリエイター業界向けポートフォリオ制作教材
 
-![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=white)
+![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-6.4-646CFF?logo=vite&logoColor=white)
-![React Router](https://img.shields.io/badge/React%20Router-7.14-CA4245?logo=reactrouter&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8.0-646CFF?logo=vite&logoColor=white)
+![React Router](https://img.shields.io/badge/React%20Router-7.15-CA4245?logo=reactrouter&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A520-339933?logo=nodedotjs&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
@@ -46,10 +46,10 @@ npm run dev
 
 ## 技術スタック
 
-- **React 18** — UIフレームワーク
-- **TypeScript** — 型安全な開発（strict モード）
+- **React 19** — UIフレームワーク
+- **TypeScript 6** — 型安全な開発（strict モード）
 - **React Router v7** — ページルーティング
-- **Vite** — 開発環境・ビルドツール
+- **Vite 8** — 開発環境・ビルドツール
 - **CSS Variables** — ダーク/ライトテーマ管理（CSSフレームワーク不使用）
 
 ## ライセンス
