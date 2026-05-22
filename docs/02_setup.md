@@ -95,13 +95,14 @@ src/
 ├── components/     ← 各セクションのコンポーネント
 ├── pages/          ← ページコンポーネント（作品詳細ページ）
 ├── hooks/          ← カスタムフック（テーマ切替など）
-└── data/           ← ポートフォリオのデータ
+├── data/           ← ポートフォリオのデータ
+└── styles/         ← CSS（セクション別に分割して管理）
 ```
 
 ターミナルで一括作成できます。
 
 ```bash
-mkdir src/components src/pages src/hooks src/data
+mkdir src/components src/pages src/hooks src/data src/styles
 ```
 
 ---
@@ -113,6 +114,44 @@ mkdir src/components src/pages src/hooks src/data
 ```bash
 npm install react-router-dom
 ```
+
+---
+
+## `tsconfig.json` について
+
+`npm create vite` で TypeScript を選ぶと、TypeScript の設定ファイル `tsconfig.json` がプロジェクト直下に自動生成されます。  
+基本的に **触らなくて問題ありません** が、何が書かれているかは知っておきましょう。
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}
+```
+
+**主要な設定の意味**:
+
+| 設定 | 意味 |
+|------|------|
+| `"target": "ES2020"` | コンパイル後の JavaScript のバージョン |
+| `"jsx": "react-jsx"` | `.tsx` の JSX を React 17+ の新しい変換方式で処理する（`import React` 不要） |
+| `"strict": true` | **すべての厳格チェックを有効化**。`null` 安全性や暗黙の `any` を禁止し、バグを未然に防ぐ |
+| `"noEmit": true` | ビルドは Vite が行うので、TypeScript は型チェックだけ担当する |
+| `"isolatedModules": true` | 1ファイルずつ独立してコンパイルできることを保証（Vite が要求） |
+| `"include": ["src"]` | `src` フォルダ配下のファイルだけを型チェック対象にする |
+
+> **`strict: true` は最初こそ厳しく感じますが、学生のうちから慣れておくべき設定です。**  
+> `null` チェック忘れ・型不一致を **コンパイル時に発見できる** ので、実行時にエラーで落ちる前にエディタが教えてくれます。
 
 ---
 
@@ -140,103 +179,153 @@ createRoot(document.getElementById('root')!).render(
 
 ---
 
-## `index.html` のタイトルを変更する
+## `index.html` の完成形
+
+`<title>` を自分の名前に変更し、フォント読み込みも追加した最終形です。  
+Vite がプロジェクト直下に作った `index.html` を以下の内容に置き換えてください。
 
 ```html
-<title>山田太郎 Portfolio</title>
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>山田太郎 Portfolio</title>
+
+    <!-- Google Fonts（Noto Sans JP / Space Grotesk） -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
 ```
 
-自分の名前に変更してください。
+**ポイント**:
+- `<title>` は自分の名前に変更してください（ブラウザのタブに表示されます）
+- `<div id="root">` が React のレンダリング先です。`main.tsx` がこの要素を `getElementById('root')` で掴みます
+- `<script type="module" src="/src/main.tsx">` がアプリのエントリーポイント。`type="module"` で ES Modules として読み込みます
+- フォントの `preconnect` は接続を先行確立しておく最適化です（読み込みが少し速くなる）
 
 ---
 
-## フォントを読み込む（任意）
+## CSS をセクション別に分割する
 
-`index.html` の `<head>` 内に追加します。
+CSS は **1ファイルにまとめると 1500 行を超えて読みづらく** なるので、`src/styles/` 配下にセクションごとに分割します。  
+`src/index.css` は **`@import` で各ファイルをまとめるだけ** の集約ファイルにします。
 
-```html
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap"
-  rel="stylesheet"
-/>
+### ファイル構成
+
+```
+src/
+├── index.css           ← @import で styles/ 配下を読み込む集約ファイル
+└── styles/
+    ├── base.css          ← リセット・CSS変数・html/body/リンク/画像
+    ├── utilities.css     ← .container / .section / .btn / .tag（共通ユーティリティ）
+    ├── header.css        ← Header コンポーネント
+    ├── hero.css          ← Hero コンポーネント + .avatar-placeholder
+    ├── about.css         ← About コンポーネント（タイムライン含む）
+    ├── skills.css        ← Skills コンポーネント
+    ├── works.css         ← Works 一覧
+    ├── gamejams.css      ← GameJams コンポーネント
+    ├── certifications.css ← Certifications コンポーネント
+    ├── contact.css       ← Contact コンポーネント
+    ├── footer.css        ← フッター
+    ├── work-detail.css   ← WorkDetail ページ
+    └── responsive.css    ← @media (max-width: 768px) 共通レスポンシブ
 ```
 
----
-
-## CSS変数を設定する
-
-`src/index.css` にデザイントークンを定義します。  
-全コンポーネントで共通の色・フォント・サイズを使えるようになります。
+### `src/index.css`（集約ファイル）
 
 ```css
-/* ===========================
-   リセット
-   すべての要素のデフォルトの余白をゼロにする
-   box-sizing: border-box でpadding・borderをwidth/heightに含める
-   =========================== */
+@import './styles/base.css';
+@import './styles/utilities.css';
+
+@import './styles/header.css';
+@import './styles/hero.css';
+@import './styles/about.css';
+@import './styles/skills.css';
+@import './styles/works.css';
+@import './styles/gamejams.css';
+@import './styles/certifications.css';
+@import './styles/contact.css';
+@import './styles/footer.css';
+
+@import './styles/work-detail.css';
+
+@import './styles/responsive.css';
+```
+
+**ポイント**:
+- **読み込み順は重要** — `base.css`（変数定義）を最初に、`responsive.css`（オーバーライド）を最後に置きます。CSS は **後に書かれた方が勝つ** ルールなので、レスポンシブのメディアクエリは最後でないと打ち消されません
+- Vite は `@import` をビルド時に **1ファイルに結合** してくれるので、本番環境で HTTP リクエストが増える心配はありません
+- 開発時もファイル単位でホットリロードが効くので、編集→確認のサイクルが速くなります
+
+### `base.css`（基礎スタイル抜粋）
+
+`base.css` には CSS変数・リセット・テーマ定義が入ります。色や角丸を変えたいときはここを編集します。
+
+```css
+/* リセット */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ===========================
-   CSS変数（ダークテーマ・デフォルト）
-   :root に定義した変数はページ全体で使える
-   =========================== */
+/* CSS変数（ダークテーマ・デフォルト） */
 :root {
-  --color-bg: #0d0d14;         /* ページ背景色 */
-  --color-surface: #16161f;    /* カード・セクションの背景色 */
-  --color-surface-2: #1e1e2e;  /* カード内の入れ子要素などの背景色 */
-  --color-border: #2a2a3d;     /* ボーダー・区切り線の色 */
-  --color-accent: #7c6af7;     /* メインアクセントカラー（紫） */
-  --color-accent-2: #f76ac8;   /* サブアクセントカラー（ピンク） */
-  --color-text: #e8e8f0;       /* 本文テキストの色 */
-  --color-text-muted: #8888aa; /* 補足テキスト・ラベルなど薄い文字色 */
-  --font-en: 'Space Grotesk', sans-serif; /* 英字フォント */
-  --font-ja: 'Noto Sans JP', sans-serif;  /* 日本語フォント */
-  --radius: 12px;              /* カードなどの角丸の大きさ */
-  --transition: 0.3s ease;     /* ホバーアニメーションの速さ */
+  --color-bg: #0d0d14;
+  --color-surface: #16161f;
+  --color-accent: #7c6af7;       /* ← ここを変えると全体のアクセントカラーが変わる */
+  --color-accent-2: #f76ac8;
+  --color-text: #e8e8f0;
+  --color-text-muted: #8888aa;
+  --font-en: 'Space Grotesk', sans-serif;
+  --font-ja: 'Noto Sans JP', sans-serif;
+  --radius: 12px;
+  --transition: 0.3s ease;
+  /* ...省略 */
 }
 
-/* ===========================
-   CSS変数（ライトテーマ）
-   data-theme="light" が <html> に付いたとき上書きされる
-   =========================== */
+/* CSS変数（ライトテーマ） */
 [data-theme="light"] {
   --color-bg: #f4f4f8;
-  --color-surface: #ffffff;
-  --color-surface-2: #ebebf3;
-  --color-border: #d8d8e8;
-  --color-accent: #6a58e8;
-  --color-accent-2: #e855b4;
   --color-text: #1a1a2e;
-  --color-text-muted: #666680;
+  /* ...省略 */
 }
 
-/* ===========================
-   html
-   =========================== */
-html {
-  scroll-behavior: smooth; /* アンカーリンクをなめらかにスクロールする */
-}
-
-/* ===========================
-   body（ページ全体の基本スタイル）
-   =========================== */
 body {
-  background-color: var(--color-bg);   /* 背景色をCSS変数から取得 */
-  color: var(--color-text);            /* 文字色をCSS変数から取得 */
-  font-family: var(--font-ja);         /* フォントをCSS変数から取得 */
-  line-height: 1.7;                    /* 行間を広めに取り読みやすくする */
-  -webkit-font-smoothing: antialiased; /* macOSでフォントをなめらかに描画する */
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-ja);
+  line-height: 1.7;
 }
 ```
 
 **ポイント**: `:root` にダークテーマ、`[data-theme="light"]` にライトテーマを定義することで、  
 `document.documentElement.setAttribute('data-theme', 'light')` を実行するだけで全体のテーマが切り替わります。
+
+---
+
+## 残りの CSS（各コンポーネントのスタイル）について
+
+各セクションの CSS（合計 **約 1500 行**）はこのドキュメントに全部貼ると逆に読みにくいので、以下の方針を推奨します。
+
+> **CSS は完成版をそのまま使ってください**
+>
+> 1. このリポジトリの `src/index.css` と `src/styles/` 配下を **そのままコピー** して使う
+> 2. 色・角丸・フォントを変えたいときは `src/styles/base.css` の CSS 変数を編集する
+> 3. 各クラスの役割を調べたいときは [CSS リファレンス](./css.md) を参照する
+> 4. 特定セクションだけ調整したいときは `src/styles/<該当セクション>.css` を編集する
+
+**「動くものを作ってから」CSS を理解する** 順番でも遅くありません。
 
 ---
 

@@ -624,24 +624,228 @@ export default function WorkDetail() {
 
 ---
 
-## GameJams・Certifications・Contact
+## GameJams — ゲームジャム参加実績
 
-同様のパターンで作ります。
-
-1. `src/data/portfolio.ts` から対応するデータと型を `import`
-2. 配列を `map()` でループして表示
-3. 値が `null` の項目は `&&` で非表示
+基本パターンは Works と同じです。データを `import` してカードコンポーネントに `map()` で展開します。
 
 ```tsx
-// 型と一緒にimportする例
+// src/components/GameJams.tsx
 import { gameJams, type GameJam } from '../data/portfolio'
 
 function JamCard({ jam }: { jam: GameJam }) {
-  // ...
+  return (
+    <article className="jam-card">
+      <div className="jam-header">
+        <h3 className="jam-name">{jam.name}</h3>
+        <div className="jam-header-sub">
+          {jam.date && <p className="jam-date">{jam.date}</p>}
+          {jam.result && <span className="jam-result">🏆 {jam.result}</span>}
+        </div>
+      </div>
+
+      {jam.theme && (
+        <div className="jam-theme">
+          <span className="jam-theme-label">テーマ</span>
+          <span className="jam-theme-text">{jam.theme}</span>
+        </div>
+      )}
+
+      <p className="jam-description">{jam.description}</p>
+
+      <div className="jam-meta-row">
+        <div className="jam-meta-item">
+          <span className="jam-meta-label">PF</span>
+          <span className="jam-meta-value">{jam.platform.join(' / ')}</span>
+        </div>
+        <div className="jam-meta-item">
+          <span className="jam-meta-label">担当</span>
+          <span className="jam-meta-value">{jam.role}</span>
+        </div>
+        <div className="jam-meta-item">
+          <span className="jam-meta-label">チーム</span>
+          <span className="jam-meta-value">{jam.team}</span>
+        </div>
+      </div>
+
+      {jam.reflection && (
+        <div className="jam-reflection">
+          <span className="jam-reflection-icon">💡</span>
+          <p>{jam.reflection}</p>
+        </div>
+      )}
+
+      {jam.url && (
+        <div className="jam-footer">
+          <a href={jam.url} className="btn btn-outline work-btn" target="_blank" rel="noreferrer">
+            制作物を見る →
+          </a>
+        </div>
+      )}
+    </article>
+  )
+}
+
+export default function GameJams() {
+  return (
+    <section className="section" id="gamejams">
+      <div className="container">
+        <h2 className="section-title"><span>Game Jams</span></h2>
+        <p className="section-sub">学校外部ゲームジャム参加実績</p>
+
+        <div className="jam-grid">
+          {gameJams.map((jam, i) => (
+            <JamCard key={i} jam={jam} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
 }
 ```
 
-詳細は各コンポーネントのソースコードを参照してください。
+**ポイント**:
+- `jam.result` のような `null` を取り得る値は `{jam.result && (...)}` でガードします
+- `jam.platform.join(' / ')` で配列をスラッシュ区切りの文字列に変換します（`['WebGL', 'Windows']` → `'WebGL / Windows'`）
+
+---
+
+## Certifications — 資格・実績
+
+`CertStatus` ユニオン型を活用して **取得済み/受験予定/取得予定/学習中** のステータスごとに色を切り替えます。  
+データ駆動でスタイルを変える典型例です。
+
+```tsx
+// src/components/Certifications.tsx
+import { certifications, type Certification, type CertStatus } from '../data/portfolio'
+
+// ステータスごとの色設定（オブジェクトでまとめて管理）
+const STATUS_CONFIG: Record<CertStatus, { color: string; bg: string; border: string }> = {
+  '取得済み': { color: '#4ade80', bg: 'rgba(74,222,128,0.1)',  border: 'rgba(74,222,128,0.3)' },
+  '受験予定': { color: '#60a5fa', bg: 'rgba(96,165,250,0.1)',  border: 'rgba(96,165,250,0.3)' },
+  '取得予定': { color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', border: 'rgba(167,139,250,0.3)' },
+  '学習中':   { color: '#fbbf24', bg: 'rgba(251,191,36,0.1)',  border: 'rgba(251,191,36,0.3)' },
+}
+
+// カテゴリごとのアイコン絵文字
+const CATEGORY_ICONS: Record<string, string> = {
+  '国家資格':     '🏛',
+  '免許':         '🪪',
+  'ベンダー認定': '🏅',
+  '競プロ':       '⚡',
+}
+
+function StatusBadge({ status }: { status: CertStatus }) {
+  const cfg = STATUS_CONFIG[status]
+  return (
+    <span
+      className="cert-status"
+      style={{ color: cfg.color, background: cfg.bg, borderColor: cfg.border }}
+    >
+      {status}
+    </span>
+  )
+}
+
+function CertRow({ cert }: { cert: Certification }) {
+  return (
+    <div className="cert-row">
+      <div className="cert-icon">{CATEGORY_ICONS[cert.category] ?? '📋'}</div>
+
+      <div className="cert-main">
+        <div className="cert-name-row">
+          <p className="cert-name">{cert.name}</p>
+          {cert.score && <span className="cert-score">{cert.score}</span>}
+        </div>
+        <p className="cert-date">{cert.date}</p>
+      </div>
+
+      <div className="cert-meta">
+        <span className="cert-category">{cert.category}</span>
+      </div>
+
+      <StatusBadge status={cert.status} />
+    </div>
+  )
+}
+
+export default function Certifications() {
+  return (
+    <section className="section" id="certifications">
+      <div className="container">
+        <h2 className="section-title"><span>Certifications</span></h2>
+        <p className="section-sub">資格・実績</p>
+
+        <div className="cert-list">
+          {certifications.map((cert, i) => (
+            <CertRow key={i} cert={cert} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+```
+
+**ポイント**:
+- `Record<CertStatus, ...>` のキーが **ユニオン型** なので、4種のステータスを書き忘れるとコンパイルエラーになります。型が「漏れ」を防いでくれる好例です
+- `STATUS_CONFIG[status]` で動的に値を取り出せるのは、ユニオン型のキーがコンパイル時に網羅されているおかげです
+- 想定外のカテゴリには `?? '📋'` でデフォルトアイコンを表示します
+
+---
+
+## Contact — 連絡先
+
+外部リンクと `mailto:` で挙動を変える小さな工夫が入っています。
+
+```tsx
+// src/components/Contact.tsx
+import { profile } from '../data/portfolio'
+
+export default function Contact() {
+  const links = [
+    { label: 'GitHub',      icon: '🐙', href: profile.links.github },
+    { label: 'Twitter / X', icon: '🐦', href: profile.links.twitter },
+    { label: 'Email',       icon: '✉️', href: `mailto:${profile.links.email}` },
+  ]
+
+  return (
+    <section className="section" id="contact">
+      <div className="container">
+        <div className="contact-inner">
+          <h2 className="section-title"><span>Contact</span></h2>
+          <p className="section-sub">連絡先</p>
+
+          <p className="contact-desc">
+            お仕事のご依頼・インターンの募集・コラボレーションなど、
+            お気軽にご連絡ください。
+            <br />
+            学生のため、返信にお時間をいただく場合があります。
+          </p>
+
+          <div className="contact-links">
+            {links.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="contact-link-item"
+                target={link.href.startsWith('mailto') ? undefined : '_blank'}
+                rel="noreferrer"
+              >
+                <span className="contact-link-icon">{link.icon}</span>
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+```
+
+**ポイント**:
+- `mailto:` リンクを新しいタブで開くのは UX 的に不自然なので、`startsWith('mailto')` で判定して `target` を切り替えています
+- `target` に `undefined` を渡すと **属性自体が出力されません**。空文字列 `""` を渡すのとは違う挙動なので注意
 
 ---
 

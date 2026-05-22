@@ -1,7 +1,39 @@
 # CSS リファレンス
 
-`src/index.css` に定義されている全クラスの一覧です。  
-自分のデザインに合わせて値を書き換えるときの参考にしてください。
+`src/styles/` 配下に **セクション別に分割** された CSS（合計 約 1500 行）の **全クラスの一覧と役割** をまとめたリファレンスです。  
+このドキュメントは「読みもの」ではなく「辞書」として使ってください。
+
+## ファイル構成
+
+```
+src/
+├── index.css           ← @import で styles/ 配下を読み込むだけの集約ファイル
+└── styles/
+    ├── base.css          ← リセット・CSS変数・body・リンク・画像
+    ├── utilities.css     ← .container / .section / .btn / .tag
+    ├── header.css        ← Header
+    ├── hero.css          ← Hero + .avatar-placeholder
+    ├── about.css         ← About + .timeline
+    ├── skills.css        ← Skills
+    ├── works.css         ← Works 一覧
+    ├── gamejams.css      ← GameJams
+    ├── certifications.css ← Certifications（@media 含む）
+    ├── contact.css       ← Contact
+    ├── footer.css        ← フッター
+    ├── work-detail.css   ← WorkDetail ページ（@media 含む）
+    └── responsive.css    ← @media (max-width: 768px) 共通レスポンシブ
+```
+
+「Header の `.theme-toggle` を調整したい」と思ったら `src/styles/header.css` を開く、というように **クラス名から該当ファイルが推測できる** 構成です。
+
+## 使い方
+
+1. **まずはこのリポジトリの `src/index.css` と `src/styles/` をそのままコピーして使う**  
+   全コンポーネントのスタイルが入った完成版です。書き写す必要はありません。
+2. **見た目を変えたくなったら `src/styles/base.css` の CSS 変数（`:root`）を編集する**  
+   色・フォント・角丸はトークン化されているので、1箇所変えるだけで全体に反映されます。
+3. **個別のクラスを調整したくなったらこのページで該当箇所を探し、そのセクションの CSS ファイルを編集する**  
+   クラス名から「これは何をするスタイルか」を逆引きできます。
 
 ---
 

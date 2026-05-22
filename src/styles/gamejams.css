@@ -1,0 +1,159 @@
+/* ===========================
+   ゲームジャム セクション
+   =========================== */
+
+/* ゲームジャムカードのグリッド */
+.jam-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* ゲームジャムカード */
+.jam-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.jam-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 24px rgba(124, 106, 247, 0.1);
+}
+
+/* カードヘッダー（タイトル・日付・結果） */
+.jam-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ゲームジャムのタイトル */
+.jam-name {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* タイトル下の補足情報（日付・結果バッジ）横並び */
+.jam-header-sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* 開催日付 */
+.jam-date {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-en);
+}
+
+/* 受賞・順位バッジ(黄色) */
+.jam-result {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 100px;
+  padding: 4px 12px;
+}
+
+/* ゲームジャムのテーマ（お題）表示エリア */
+.jam-theme {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  background: rgba(124, 106, 247, 0.06);
+  border-left: 2px solid var(--color-accent);
+  border-radius: 0 8px 8px 0;
+  padding: 8px 14px;
+}
+
+/* 「Theme」ラベル */
+.jam-theme-label {
+  font-size: 0.72rem;
+  font-family: var(--font-en);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+/* テーマのテキスト */
+.jam-theme-text {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* ゲームの説明文 */
+.jam-description {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+/* メタ情報グリッド（チーム構成・使用ツールなど） */
+.jam-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  background: var(--color-surface-2);
+  border-radius: 8px;
+}
+
+/* 各メタ情報の行（ラベル + 値） */
+.jam-meta-item {
+  display: flex;
+  gap: 12px;
+  font-size: 0.83rem;
+}
+
+/* ラベル（「Role」「Tool」など） */
+.jam-meta-label {
+  width: 36px;
+  flex-shrink: 0;
+  color: var(--color-accent);
+  font-family: var(--font-en);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding-top: 1px;
+}
+
+/* 値 */
+.jam-meta-value {
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* 振り返り・反省コメント */
+.jam-reflection {
+  display: flex;
+  gap: 8px;
+  font-size: 0.83rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  padding-top: 4px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* 振り返りの左アイコン */
+.jam-reflection-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* フッター（リンクボタンエリア）をカード最下部に寄せる */
+.jam-footer {
+  margin-top: auto;
+}

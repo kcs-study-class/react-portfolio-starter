@@ -1,0 +1,152 @@
+/* ===========================
+   Works セクション（作品一覧）
+   =========================== */
+
+/* 作品カードのグリッド */
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* 作品カード */
+.work-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden; /* サムネイル画像がはみ出さないようにする */
+  transition: all var(--transition);
+}
+
+.work-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-4px); /* カードが浮き上がるアニメーション */
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+}
+
+/* サムネイル表示エリア */
+.work-thumbnail {
+  width: 100%;
+  height: 200px;
+  background: var(--color-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.work-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 画像を比率を保ちながらエリアを埋める */
+  transition: transform 0.4s ease;
+}
+
+/* ホバー時にサムネイルをズームインする */
+.work-card:hover .work-thumbnail img {
+  transform: scale(1.04);
+}
+
+/* カード本文エリア */
+.work-body {
+  padding: 24px;
+}
+
+/* カテゴリバッジ（Web / Game など） */
+.work-category-badge {
+  font-family: var(--font-en);
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+/* 作品タイトル */
+.work-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* 作品の説明文 */
+.work-description {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+/* 期間・役割などのメタ情報 */
+.work-meta {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+/* メタ情報の値部分（ラベルより明るく） */
+.work-meta span {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* 注目ポイント（ハイライト） */
+.work-highlight {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--color-accent-2);
+  margin-top: 12px;
+}
+
+/* ハイライトの左側の星マーク */
+.work-highlight::before {
+  content: '★';
+  font-size: 0.75rem;
+}
+
+/* 技術スタックのタグ一覧 */
+.work-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* 出展・公開先の一覧 */
+.work-venues {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+/* 各出展先タグ */
+.work-venue-tag {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  display: inline-block;
+}
+
+/* カード下部のリンクボタンエリア */
+.work-links {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+/* カード用の小さめボタン */
+.work-btn {
+  font-size: 0.82rem;
+  padding: 9px 18px;
+}

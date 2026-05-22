@@ -1,0 +1,143 @@
+/* ===========================
+   資格・実績 セクション
+   =========================== */
+
+/* 資格リスト */
+.cert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 各資格行（アイコン・名前・カテゴリ・ステータスの4カラム） */
+.cert-row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 18px 24px;
+  transition: border-color var(--transition);
+}
+
+.cert-row:hover {
+  border-color: var(--color-accent);
+}
+
+/* 資格アイコン（絵文字） */
+.cert-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--color-surface-2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+/* 資格名・日付エリア */
+.cert-main {
+  min-width: 0; /* テキストが長くても折り返せるようにする */
+}
+
+/* 資格名とスコアバッジの横並び */
+.cert-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 3px;
+}
+
+/* 資格名 */
+.cert-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* スコア表示バッジ（TOEIC 800 など） */
+.cert-score {
+  font-size: 0.78rem;
+  color: var(--color-accent);
+  font-family: var(--font-en);
+  font-weight: 700;
+  background: rgba(124, 106, 247, 0.1);
+  border: 1px solid rgba(124, 106, 247, 0.3);
+  border-radius: 100px;
+  padding: 1px 9px;
+}
+
+/* 取得日 */
+.cert-date {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* カテゴリタグのラッパー */
+.cert-meta {
+  display: flex;
+  align-items: center;
+  min-width: fit-content;
+}
+
+/* カテゴリタグ（Language / Technical など） */
+.cert-category {
+  font-size: 0.75rem;
+  font-family: var(--font-en);
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 100px;
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+
+/* 取得状況バッジ（取得済み / 勉強中 など） */
+.cert-status {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 100px;
+  border: 1px solid;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* スマホ表示：資格行を2カラムに折りたたむ */
+@media (max-width: 640px) {
+  .cert-row {
+    grid-template-columns: 36px 1fr;
+    grid-template-rows: auto auto;
+    padding: 16px;
+  }
+
+  .cert-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    grid-row: 1;
+  }
+
+  .cert-main {
+    grid-row: 1;
+  }
+
+  .cert-meta {
+    grid-column: 2;
+    grid-row: 2;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+
+  .cert-status {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    width: fit-content;
+  }
+}
