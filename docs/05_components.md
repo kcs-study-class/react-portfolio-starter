@@ -1,7 +1,7 @@
 # 第5章：コンポーネントを作る
 
 データが定義できたら、各セクションのコンポーネントを1つずつ作ります。  
-ファイルの拡張子は `.tsx`（TypeScript + JSX）です。
+ファイルの拡張子は `.tsx`（TypeScript 内で TSX 構文を使えるファイル。詳しくは [第3章](./03_react_basics.md) のメモを参照）です。
 
 ---
 
@@ -103,7 +103,7 @@ export default function ScrollToTop() {
 
 ## useTheme — テーマ切替フック
 
-フックファイルは `.ts`（JSX を含まないため `.tsx` は不要）です。
+フックファイルは `.ts`（TSX 構文（`<div>` などのタグ）を含まないため `.tsx` ではなく `.ts` で十分）です。
 
 ```ts
 // src/hooks/useTheme.ts
@@ -618,7 +618,7 @@ export default function WorkDetail() {
 
 **ポイント**:
 - `works.find((w) => w.id === Number(id))` でURLの文字列 `'1'` を数値 `1` に変換して検索します
-- `ReactNode` 型は「JSXとして表示できるもの全般」を表します。`children` の型によく使います
+- `ReactNode` 型は「TSX として表示できるもの全般（要素・文字列・数値・配列など）」を表します。`children` の型によく使います
 - `MetaRow` の `value` が `string | undefined` なのは `platform?.join(...)` が undefined を返し得るためです
 - サムネイル表示は `SafeImg` に任せているので、`work.thumbnail` が `null` でも自動でフォールバックの絵文字が出ます。同じロジックを Works.tsx と二重に書く必要がありません
 

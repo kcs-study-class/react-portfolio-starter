@@ -144,7 +144,7 @@ npm install react-router-dom
 | 設定 | 意味 |
 |------|------|
 | `"target": "ES2020"` | コンパイル後の JavaScript のバージョン |
-| `"jsx": "react-jsx"` | `.tsx` の JSX を React 17+ の新しい変換方式で処理する（`import React` 不要） |
+| `"jsx": "react-jsx"` | `.tsx` 内の TSX 構文を React 17+ の新しい変換方式で処理する（`import React` が不要になる）。設定キー名の `jsx` は TypeScript の仕様上の名称で、TSX も同じオプションで処理されます |
 | `"strict": true` | **すべての厳格チェックを有効化**。`null` 安全性や暗黙の `any` を禁止し、バグを未然に防ぐ |
 | `"noEmit": true` | ビルドは Vite が行うので、TypeScript は型チェックだけ担当する |
 | `"isolatedModules": true` | 1ファイルずつ独立してコンパイルできることを保証（Vite が要求） |

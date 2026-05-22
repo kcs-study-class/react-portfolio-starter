@@ -24,7 +24,11 @@ function App() {
 }
 ```
 
-### JSXのルール
+### TSX のルール
+
+> **JSX と TSX の関係**: JSX は「JavaScript の中に HTML 風の記法を書ける仕組み」のことで、ファイル拡張子は `.jsx`。  
+> その JSX を **TypeScript ファイル** で使ったものが TSX（拡張子 `.tsx`）です。  
+> 文法ルール自体は JSX と同じで、TSX は **JSX + 型注釈** と考えれば OK です。
 
 ```tsx
 // ✗ 複数の要素をそのまま返せない
