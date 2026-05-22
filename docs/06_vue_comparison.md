@@ -24,20 +24,25 @@ npm install vue-router
 npm run dev
 ```
 
-`src/data/portfolio.js` は React版・Vue版で **まったく同じ内容**が使えます。  
+`src/data/portfolio.ts`（Vue 版なら `.js` でもOK）は React 版・Vue 版で **まったく同じ内容**が使えます。  
 変わるのはコンポーネントファイルの書き方だけです。
 
 ---
 
 ## コンポーネントの書き方
 
-### React（.jsx）
+### React（.tsx）
 
-```jsx
-// Header.jsx
+```tsx
+// Header.tsx
 import { profile } from '../data/portfolio'
 
-export default function Header({ theme, onThemeToggle }) {
+interface Props {
+  theme: string
+  onThemeToggle: () => void
+}
+
+export default function Header({ theme, onThemeToggle }: Props) {
   return (
     <header className="header">
       <a href="#hero" className="header-logo">
@@ -88,7 +93,7 @@ const firstName = computed(() => profile.nameEn.split(' ')[0])
 
 ### React（useState）
 
-```jsx
+```tsx
 import { useState } from 'react'
 
 function Skills() {
@@ -123,7 +128,7 @@ const activeCategory = ref('all')
 
 ### React（map）
 
-```jsx
+```tsx
 {skills.map((skill) => (
   <SkillCard key={skill.name} skill={skill} />
 ))}
@@ -145,7 +150,7 @@ const activeCategory = ref('all')
 
 ### React
 
-```jsx
+```tsx
 {work.link && <a href={work.link}>Live Demo</a>}
 ```
 
@@ -159,10 +164,10 @@ const activeCategory = ref('all')
 
 ## カスタムフック vs Composable
 
-### React（useTheme.js）
+### React（useTheme.ts）
 
-```js
-export function useTheme() {
+```ts
+export function useTheme(): { theme: string; toggle: () => void } {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') ?? 'dark')
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -195,10 +200,10 @@ export function useTheme() {
 
 ### React（React Router v7）
 
-```jsx
-// main.jsx
+```tsx
+// main.tsx
 import { BrowserRouter } from 'react-router-dom'
-// App.jsx
+// App.tsx
 import { Routes, Route } from 'react-router-dom'
 
 <Routes>

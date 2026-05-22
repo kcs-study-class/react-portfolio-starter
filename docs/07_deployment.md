@@ -7,7 +7,7 @@
 ## 公開前チェックリスト
 
 - [ ] `index.html` の `<title>` を自分の名前に変更した
-- [ ] `src/data/portfolio.js` の名前・学校名に誤字がない
+- [ ] `src/data/portfolio.ts` の名前・学校名に誤字がない
 - [ ] GitHub リポジトリのURLが正しく設定されている
 - [ ] GitHubリポジトリが `public`（公開設定）になっている
 - [ ] メールアドレスが正しい

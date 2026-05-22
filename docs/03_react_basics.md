@@ -8,7 +8,7 @@
 
 画面を「部品」に分けて作る仕組みです。部品を組み合わせて1ページを構成します。
 
-```jsx
+```tsx
 // 部品を定義する
 function Greeting() {
   return <h1>こんにちは！</h1>
@@ -26,7 +26,7 @@ function App() {
 
 ### JSXのルール
 
-```jsx
+```tsx
 // ✗ 複数の要素をそのまま返せない
 return (
   <h1>タイトル</h1>
@@ -49,11 +49,19 @@ return <div className="container">...</div>
 
 ## Props（プロパティ）
 
-コンポーネントに外からデータを渡す仕組みです。
+コンポーネントに外からデータを渡す仕組みです。  
+TypeScript では受け取る Props の **型** を `interface` で定義します。書き忘れや型違いを防げます。
 
-```jsx
-// Props を受け取る
-function SkillCard({ name, level, version }) {
+```tsx
+// Props の型を定義する
+interface Props {
+  name: string
+  level: number
+  version: string
+}
+
+// Props を受け取る（: Props で型を指定）
+function SkillCard({ name, level, version }: Props) {
   return (
     <div>
       <strong>{name}</strong>
@@ -68,17 +76,20 @@ function SkillCard({ name, level, version }) {
 <SkillCard name="React" version="v18" level={65} />
 ```
 
+**ポイント**: `level` を `level="80"` のように **文字列で渡すとエラー** になります。TypeScript が型を見張ってくれるので、ミスがコンパイル時に発覚します。
+
 ---
 
 ## useState（状態管理）
 
 ボタンクリックなど「変わるデータ」を管理します。
 
-```jsx
+```tsx
 import { useState } from 'react'
 
 function FilterButtons() {
   // [現在の値, 値を変える関数] = useState(初期値)
+  // 初期値が 'all' なので、TypeScript が activeCategory の型を string と自動推論します
   const [activeCategory, setActiveCategory] = useState('all')
 
   return (
@@ -99,10 +110,10 @@ function FilterButtons() {
 
 コンポーネントが表示されたとき・値が変わったときに実行したい処理を書きます。
 
-```jsx
+```tsx
 import { useEffect } from 'react'
 
-function ThemeApplier({ theme }) {
+function ThemeApplier({ theme }: { theme: string }) {
   useEffect(() => {
     // theme が変わるたびに実行される
     document.documentElement.setAttribute('data-theme', theme)
@@ -153,7 +164,7 @@ function App() {
 
 配列のデータをループして画面に表示します。`key` は必須です。
 
-```jsx
+```tsx
 const skills = [
   { name: 'Unity', level: 80 },
   { name: 'React', level: 65 },
@@ -178,8 +189,10 @@ function SkillList() {
 
 データがある場合だけ表示するときは `&&` を使います。
 
-```jsx
-function WorkCard({ work }) {
+```tsx
+import { type Work } from '../data/portfolio'
+
+function WorkCard({ work }: { work: Work }) {
   return (
     <div>
       <h3>{work.title}</h3>
@@ -205,12 +218,12 @@ function WorkCard({ work }) {
 
 ## データの流れ
 
-このポートフォリオのデータは `src/data/portfolio.js` に集約し、各コンポーネントが `import` して使います。
+このポートフォリオのデータは `src/data/portfolio.ts` に集約し、各コンポーネントが `import` して使います。
 
 ```
-src/data/portfolio.js
+src/data/portfolio.ts
     ↓ import
-App.jsx
+App.tsx
     ↓ props
 Header / Hero / About / Skills / Works / GameJams / Certifications / Contact
     ↓ props
