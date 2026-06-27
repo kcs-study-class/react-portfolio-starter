@@ -1,11 +1,18 @@
-import { FaGamepad, FaArrowRight } from 'react-icons/fa6'
+import { FaArrowRight } from 'react-icons/fa6'
 import { profile } from '../data/portfolio'
+import SafeImg from './SafeImg'
 
 export default function Hero() {
   return (
     <section className="hero section" id="hero">
       <div className="container">
-        <div className="avatar-placeholder"><FaGamepad /></div>
+        <div className="avatar-placeholder">
+          <SafeImg
+            src={profile.avatar}
+            alt={profile.name}
+            fallback={profile.nameEn.charAt(0)}
+          />
+        </div>
 
         <p className="hero-eyebrow">Portfolio</p>
 

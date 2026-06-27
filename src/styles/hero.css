@@ -177,7 +177,16 @@
   align-items: center;
   justify-content: center;
   font-size: 3rem;
-  color: #fff; /* アイコン(currentColor)を白に。グラデ背景は常時カラーのため */
+  font-weight: 700;
+  color: #fff; /* 頭文字(フォールバック)を白に。グラデ背景は常時カラーのため */
   margin-bottom: 32px;
+  overflow: hidden; /* avatar 画像を円形に収める */
   box-shadow: 0 0 60px rgba(124, 106, 247, 0.3); /* 紫の光彩エフェクト */
+}
+
+/* profile.avatar が設定されている場合の画像（円形いっぱいに表示） */
+.avatar-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
