@@ -136,6 +136,7 @@ Props を受け取るコンポーネントには `interface` で型を定義し�
 ```tsx
 // src/components/Header.tsx
 import { Link } from 'react-router-dom'
+import { FaSun, FaMoon } from 'react-icons/fa6'
 import { profile } from '../data/portfolio'
 
 interface Props {
@@ -176,7 +177,7 @@ export default function Header({ theme, onThemeToggle }: Props) {
             onClick={onThemeToggle}
             aria-label={theme === 'dark' ? 'ライトモードに切替' : 'ダークモードに切替'}
           >
-            {theme === 'dark' ? '☀️' : '🌙'}
+            {theme === 'dark' ? <FaSun /> : <FaMoon />}
           </button>
         </div>
       </div>
@@ -224,13 +225,14 @@ export default function Footer() {
 
 ```tsx
 // src/components/Hero.tsx
+import { FaGamepad, FaArrowRight } from 'react-icons/fa6'
 import { profile } from '../data/portfolio'
 
 export default function Hero() {
   return (
     <section className="hero section" id="hero">
       <div className="container">
-        <div className="avatar-placeholder">🎮</div>
+        <div className="avatar-placeholder"><FaGamepad /></div>
 
         <p className="hero-eyebrow">Portfolio</p>
 
@@ -250,7 +252,7 @@ export default function Hero() {
         )}
 
         <div className="hero-actions">
-          <a href="#works" className="btn btn-primary">制作物を見る →</a>
+          <a href="#works" className="btn btn-primary">制作物を見る <FaArrowRight /></a>
           <a href="#contact" className="btn btn-outline">連絡する</a>
         </div>
       </div>
@@ -326,6 +328,7 @@ export default function About() {
 ```tsx
 // src/components/Skills.tsx
 import { useState } from 'react'
+import { FaStar } from 'react-icons/fa6'
 import { skills, type Skill } from '../data/portfolio'
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -379,7 +382,7 @@ function SkillCard({ skill }: { skill: Skill }) {
       </ul>
       {skill.note && (
         <p className="skill-note">
-          <span className="skill-note-icon">✦</span>
+          <span className="skill-note-icon"><FaStar /></span>
           {skill.note}
         </p>
       )}
@@ -441,12 +444,13 @@ Works 一覧と WorkDetail の両方で **「画像が無い／読み込みに�
 ```tsx
 // src/components/SafeImg.tsx
 import { useState } from 'react'
+import type { ReactNode } from 'react'
 
 interface Props {
   src: string | null
   alt: string
   className?: string
-  fallback: string
+  fallback: ReactNode
 }
 
 export default function SafeImg({ src, alt, className, fallback }: Props) {
@@ -471,6 +475,7 @@ export default function SafeImg({ src, alt, className, fallback }: Props) {
 - `onError` は `<img>` の読み込みが失敗したとき（404、ネットワークエラーなど）に発火するイベントです
 - `useState(false)` で「失敗したかどうか」を覚えておき、失敗後は再度読み込まないようにします
 - `className?` の `?` は **省略可能** という意味です（呼び出し側で渡さなくてもOK）
+- `fallback` は `ReactNode` 型なので、文字列でも react-icons のアイコン（`<FaGamepad />` など）でも渡せます
 
 > **DRY原則**: Don't Repeat Yourself（同じことを繰り返すな）。  
 > 同じロジックが2箇所以上に出てきたら、共通化を検討するサインです。
@@ -480,27 +485,35 @@ export default function SafeImg({ src, alt, className, fallback }: Props) {
 ## Works — 制作物一覧
 
 `WorkCard` を子コンポーネントに分離します。詳細ページへは `<Link>` で遷移します。  
-サムネイル画像は先ほど作った `SafeImg` を使い、カテゴリ別の絵文字（`CATEGORY_EMOJI`）は `portfolio.ts` から `import` します。
+サムネイル画像は先ほど作った `SafeImg` を使い、カテゴリ別のアイコン（`CATEGORY_ICON`）は `portfolio.ts` から `import` します。
 
 ```tsx
 // src/components/Works.tsx
 import { Link } from 'react-router-dom'
 import {
+  FaLocationDot,
+  FaArrowRight,
+  FaGithub,
+  FaArrowUpRightFromSquare,
+} from 'react-icons/fa6'
+import {
   works,
-  CATEGORY_EMOJI,
-  CATEGORY_EMOJI_FALLBACK,
+  CATEGORY_ICON,
+  CATEGORY_ICON_FALLBACK,
   type Work,
 } from '../data/portfolio'
 import SafeImg from './SafeImg'
 
 function WorkCard({ work }: { work: Work }) {
+  const CategoryIcon = CATEGORY_ICON[work.category] ?? CATEGORY_ICON_FALLBACK
+
   return (
     <article className="work-card">
       <div className="work-thumbnail">
         <SafeImg
           src={work.thumbnail}
           alt={work.title}
-          fallback={CATEGORY_EMOJI[work.category] ?? CATEGORY_EMOJI_FALLBACK}
+          fallback={<CategoryIcon />}
         />
       </div>
       <div className="work-body">
@@ -513,7 +526,7 @@ function WorkCard({ work }: { work: Work }) {
         {work.venues?.length > 0 && (
           <div className="work-venues">
             {work.venues.map((v, i) => (
-              <span key={i} className="work-venue-tag">📍 {v.name}　{v.date}</span>
+              <span key={i} className="work-venue-tag"><FaLocationDot /> {v.name}　{v.date}</span>
             ))}
           </div>
         )}
@@ -524,15 +537,15 @@ function WorkCard({ work }: { work: Work }) {
 
         <div className="work-links">
           <Link to={`/works/${work.id}`} className="btn btn-primary work-btn">
-            詳細を見る →
+            詳細を見る <FaArrowRight />
           </Link>
           {work.github && (
             <a href={work.github} className="btn btn-outline work-btn"
-               target="_blank" rel="noreferrer">GitHub</a>
+               target="_blank" rel="noreferrer"><FaGithub /> GitHub</a>
           )}
           {work.link && (
             <a href={work.link} className="btn btn-outline work-btn"
-               target="_blank" rel="noreferrer">Live Demo</a>
+               target="_blank" rel="noreferrer"><FaArrowUpRightFromSquare /> Live Demo</a>
           )}
         </div>
       </div>
@@ -565,10 +578,11 @@ export default function Works() {
 // src/pages/WorkDetail.tsx
 import { useParams, Link, Navigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
+import { FaArrowLeft } from 'react-icons/fa6'
 import {
   works,
-  CATEGORY_EMOJI,
-  CATEGORY_EMOJI_FALLBACK,
+  CATEGORY_ICON,
+  CATEGORY_ICON_FALLBACK,
 } from '../data/portfolio'
 import SafeImg from '../components/SafeImg'
 
@@ -598,16 +612,16 @@ export default function WorkDetail() {
   if (!work) return <Navigate to="/" replace />
 
   // 2回使うので変数化（同じ式を繰り返さない）
-  const categoryEmoji = CATEGORY_EMOJI[work.category] ?? CATEGORY_EMOJI_FALLBACK
+  const CategoryIcon = CATEGORY_ICON[work.category] ?? CATEGORY_ICON_FALLBACK
 
   return (
     <div className="wd-page">
       <div className="container">
-        <Link to="/#works" className="wd-back">← 作品一覧に戻る</Link>
+        <Link to="/#works" className="wd-back"><FaArrowLeft /> 作品一覧に戻る</Link>
 
         <div className="wd-hero">
           <div className="wd-hero-thumbnail">
-            <SafeImg src={work.thumbnail} alt={work.title} fallback={categoryEmoji} />
+            <SafeImg src={work.thumbnail} alt={work.title} fallback={<CategoryIcon />} />
           </div>
           <div className="wd-hero-info">
             <p className="work-category-badge">{work.genre}</p>
@@ -649,7 +663,7 @@ export default function WorkDetail() {
 - `works.find((w) => w.id === Number(id))` でURLの文字列 `'1'` を数値 `1` に変換して検索します
 - `ReactNode` 型は「TSX として表示できるもの全般（要素・文字列・数値・配列など）」を表します。`children` の型によく使います
 - `MetaRow` の `value` が `string | undefined` なのは `platform?.join(...)` が undefined を返し得るためです
-- サムネイル表示は `SafeImg` に任せているので、`work.thumbnail` が `null` でも自動でフォールバックの絵文字が出ます。同じロジックを Works.tsx と二重に書く必要がありません
+- サムネイル表示は `SafeImg` に任せているので、`work.thumbnail` が `null` でも自動でフォールバックのアイコンが出ます。同じロジックを Works.tsx と二重に書く必要がありません
 
 ---
 
@@ -659,6 +673,7 @@ export default function WorkDetail() {
 
 ```tsx
 // src/components/GameJams.tsx
+import { FaTrophy, FaLightbulb, FaArrowRight } from 'react-icons/fa6'
 import { gameJams, type GameJam } from '../data/portfolio'
 
 function JamCard({ jam }: { jam: GameJam }) {
@@ -668,7 +683,7 @@ function JamCard({ jam }: { jam: GameJam }) {
         <h3 className="jam-name">{jam.name}</h3>
         <div className="jam-header-sub">
           {jam.date && <p className="jam-date">{jam.date}</p>}
-          {jam.result && <span className="jam-result">🏆 {jam.result}</span>}
+          {jam.result && <span className="jam-result"><FaTrophy /> {jam.result}</span>}
         </div>
       </div>
 
@@ -698,7 +713,7 @@ function JamCard({ jam }: { jam: GameJam }) {
 
       {jam.reflection && (
         <div className="jam-reflection">
-          <span className="jam-reflection-icon">💡</span>
+          <span className="jam-reflection-icon"><FaLightbulb /></span>
           <p>{jam.reflection}</p>
         </div>
       )}
@@ -706,7 +721,7 @@ function JamCard({ jam }: { jam: GameJam }) {
       {jam.url && (
         <div className="jam-footer">
           <a href={jam.url} className="btn btn-outline work-btn" target="_blank" rel="noreferrer">
-            制作物を見る →
+            制作物を見る <FaArrowRight />
           </a>
         </div>
       )}
@@ -745,6 +760,11 @@ export default function GameJams() {
 
 ```tsx
 // src/components/Certifications.tsx
+import type { IconType } from 'react-icons'
+import {
+  FaLandmark, FaIdCard, FaMedal, FaBolt,
+  FaFlag, FaDesktop, FaBookOpen, FaClipboard,
+} from 'react-icons/fa6'
 import { certifications, type Certification, type CertStatus } from '../data/portfolio'
 
 // ステータスごとの色設定（オブジェクトでまとめて管理）
@@ -755,12 +775,13 @@ const STATUS_CONFIG: Record<CertStatus, { color: string; bg: string; border: str
   '学習中':   { color: '#fbbf24', bg: 'rgba(251,191,36,0.1)',  border: 'rgba(251,191,36,0.3)' },
 }
 
-// カテゴリごとのアイコン絵文字
-const CATEGORY_ICONS: Record<string, string> = {
-  '国家資格':     '🏛',
-  '免許':         '🪪',
-  'ベンダー認定': '🏅',
-  '競プロ':       '⚡',
+// カテゴリごとのアイコン（react-icons コンポーネント）
+const CATEGORY_ICONS: Record<string, IconType> = {
+  '国家資格':     FaLandmark,
+  '免許':         FaIdCard,
+  'ベンダー認定': FaMedal,
+  '競プロ':       FaBolt,
+  // 'CTF': FaFlag, 'ISUCON': FaDesktop, '学習中': FaBookOpen ...
 }
 
 function StatusBadge({ status }: { status: CertStatus }) {
@@ -778,7 +799,12 @@ function StatusBadge({ status }: { status: CertStatus }) {
 function CertRow({ cert }: { cert: Certification }) {
   return (
     <div className="cert-row">
-      <div className="cert-icon">{CATEGORY_ICONS[cert.category] ?? '📋'}</div>
+      <div className="cert-icon">
+        {(() => {
+          const Icon = CATEGORY_ICONS[cert.category] ?? FaClipboard
+          return <Icon />
+        })()}
+      </div>
 
       <div className="cert-main">
         <div className="cert-name-row">
@@ -818,7 +844,7 @@ export default function Certifications() {
 **ポイント**:
 - `Record<CertStatus, ...>` のキーが **ユニオン型** なので、4種のステータスを書き忘れるとコンパイルエラーになります。型が「漏れ」を防いでくれる好例です
 - `STATUS_CONFIG[status]` で動的に値を取り出せるのは、ユニオン型のキーがコンパイル時に網羅されているおかげです
-- 想定外のカテゴリには `?? '📋'` でデフォルトアイコンを表示します
+- 想定外のカテゴリには `?? FaClipboard` でデフォルトアイコンを表示します。アイコンは値がコンポーネントなので、`const Icon = ...; <Icon />` と一度変数に受けてから描画します（JSX のタグ名は大文字始まりの変数である必要があるため）
 
 ---
 

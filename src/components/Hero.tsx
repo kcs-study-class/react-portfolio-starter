@@ -1,10 +1,11 @@
+import { FaGamepad, FaArrowRight } from 'react-icons/fa6'
 import { profile } from '../data/portfolio'
 
 export default function Hero() {
   return (
     <section className="hero section" id="hero">
       <div className="container">
-        <div className="avatar-placeholder">🎮</div>
+        <div className="avatar-placeholder"><FaGamepad /></div>
 
         <p className="hero-eyebrow">Portfolio</p>
 
@@ -25,7 +26,7 @@ export default function Hero() {
 
         <div className="hero-actions">
           <a href="#works" className="btn btn-primary">
-            制作物を見る →
+            制作物を見る <FaArrowRight />
           </a>
           <a href="#contact" className="btn btn-outline">
             連絡する

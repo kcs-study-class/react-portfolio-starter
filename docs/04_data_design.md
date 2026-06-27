@@ -258,28 +258,32 @@ export const timeline: TimelineItem[] = [
 
 ---
 
-## 7. カテゴリ別の絵文字（共通定数）
+## 7. カテゴリ別のアイコン（共通定数）
 
-Works 一覧と作品詳細ページの両方で、画像が無い作品にカテゴリ別の絵文字を出します。  
+Works 一覧と作品詳細ページの両方で、画像が無い作品にカテゴリ別のアイコンを出します。  
 同じ対応表を2箇所に書くのは間違いの元なので、データファイルに一度だけ定義します。
+アイコンは react-icons のコンポーネント（`IconType`）を値として持ちます。
 
 ```ts
-export const CATEGORY_EMOJI: Record<string, string> = {
-  game: '🎮',
-  web: '🌐',
-  '3d': '🧊',
+import type { IconType } from 'react-icons'
+import { FaGamepad, FaGlobe, FaCube, FaFolder } from 'react-icons/fa6'
+
+export const CATEGORY_ICON: Record<string, IconType> = {
+  game: FaGamepad,
+  web: FaGlobe,
+  '3d': FaCube,
 }
 
-export const CATEGORY_EMOJI_FALLBACK = '📁'
+export const CATEGORY_ICON_FALLBACK: IconType = FaFolder
 ```
 
 **ポイント**:
-- `Record<string, string>` は「キーが文字列、値が文字列のオブジェクト」を表す型です
-- 想定外のカテゴリが来たときに備えて `CATEGORY_EMOJI_FALLBACK` を別に用意します
-- 呼び出し側では `CATEGORY_EMOJI[work.category] ?? CATEGORY_EMOJI_FALLBACK` で安全に取り出せます
+- `Record<string, IconType>` は「キーが文字列、値が react-icons のアイコンコンポーネント」を表す型です
+- 想定外のカテゴリが来たときに備えて `CATEGORY_ICON_FALLBACK` を別に用意します
+- 呼び出し側では `const Icon = CATEGORY_ICON[work.category] ?? CATEGORY_ICON_FALLBACK` で取り出し、`<Icon />` として描画します
 
 > **なぜデータファイルに置く？**  
-> 絵文字は「見た目」なのでコンポーネントに書きたくなりますが、**カテゴリと絵文字の対応** は作品データ（`category` フィールド）と一緒に管理した方が一貫性があります。新しいカテゴリを追加するときも、ここ1箇所だけ直せばOKです。
+> アイコンは「見た目」なのでコンポーネントに書きたくなりますが、**カテゴリとアイコンの対応** は作品データ（`category` フィールド）と一緒に管理した方が一貫性があります。新しいカテゴリを追加するときも、ここ1箇所だけ直せばOKです。
 
 ---
 

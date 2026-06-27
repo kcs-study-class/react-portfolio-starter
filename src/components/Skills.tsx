@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FaStar } from 'react-icons/fa6'
 import { skills, type Skill } from '../data/portfolio'
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -63,7 +64,7 @@ function SkillCard({ skill }: { skill: Skill }) {
 
       {skill.note && (
         <p className="skill-note">
-          <span className="skill-note-icon">✦</span>
+          <span className="skill-note-icon"><FaStar /></span>
           {skill.note}
         </p>
       )}

@@ -1,3 +1,6 @@
+import type { IconType } from 'react-icons'
+import { FaGamepad, FaGlobe, FaCube, FaFolder } from 'react-icons/fa6'
+
 export interface Profile {
   name: string
   nameEn: string
@@ -80,13 +83,13 @@ export interface TimelineItem {
   event: string
 }
 
-export const CATEGORY_EMOJI: Record<string, string> = {
-  game: '🎮',
-  web: '🌐',
-  '3d': '🧊',
+export const CATEGORY_ICON: Record<string, IconType> = {
+  game: FaGamepad,
+  web: FaGlobe,
+  '3d': FaCube,
 }
 
-export const CATEGORY_EMOJI_FALLBACK = '📁'
+export const CATEGORY_ICON_FALLBACK: IconType = FaFolder
 
 export const profile: Profile = {
   name: '山田 太郎',

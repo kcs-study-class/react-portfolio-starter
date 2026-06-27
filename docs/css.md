@@ -168,7 +168,7 @@ src/
 .skill-capabilities   できること一覧のFlexラップリスト
 .skill-cap-tag        できることの各タグ（グレー背景・ピル型）
 .skill-note           実装経験メモ（上ボーダー・小テキスト）
-.skill-note-icon      ✦ アイコン（アクセント2カラー）
+.skill-note-icon      星アイコン（react-icons / アクセント2カラー）
 ```
 
 ---
@@ -222,7 +222,7 @@ src/
 .jam-meta-label     ラベル（PF・担当・チーム）
 .jam-meta-value     値テキスト
 .jam-reflection     振り返りテキスト（電球アイコン付き）
-.jam-reflection-icon 💡 アイコン
+.jam-reflection-icon 電球アイコン（react-icons）
 .jam-footer         カード下部のリンクエリア
 ```
 
@@ -277,7 +277,7 @@ src/
 
 ```
 .wd-page            詳細ページ全体（上下パディング）
-.wd-back            「← 作品一覧に戻る」テキストリンク
+.wd-back            「←（戻る矢印アイコン）作品一覧に戻る」テキストリンク
 ```
 
 ### ヒーローエリア
@@ -314,7 +314,7 @@ src/
 .wd-venues-label  "出展・公開先" のラベルテキスト
 .wd-venues-list   出展先リストのFlexColumnコンテナ
 .wd-venue-item    各出展先の行（アイコン・名前・日付を横並び）
-.wd-venue-icon    📍 アイコン
+.wd-venue-icon    ピン（開催地）アイコン（react-icons）
 .wd-venue-name    会場・公開先名
 .wd-venue-date    日付（右端寄せ）
 ```

@@ -1,3 +1,4 @@
+import { FaTrophy, FaLightbulb, FaArrowRight } from 'react-icons/fa6'
 import { gameJams, type GameJam } from '../data/portfolio'
 
 function JamCard({ jam }: { jam: GameJam }) {
@@ -8,7 +9,7 @@ function JamCard({ jam }: { jam: GameJam }) {
         <div className="jam-header-sub">
           {jam.date && <p className="jam-date">{jam.date}</p>}
           {jam.result && (
-            <span className="jam-result">🏆 {jam.result}</span>
+            <span className="jam-result"><FaTrophy /> {jam.result}</span>
           )}
         </div>
       </div>
@@ -39,7 +40,7 @@ function JamCard({ jam }: { jam: GameJam }) {
 
       {jam.reflection && (
         <div className="jam-reflection">
-          <span className="jam-reflection-icon">💡</span>
+          <span className="jam-reflection-icon"><FaLightbulb /></span>
           <p>{jam.reflection}</p>
         </div>
       )}
@@ -47,7 +48,7 @@ function JamCard({ jam }: { jam: GameJam }) {
       {jam.url && (
         <div className="jam-footer">
           <a href={jam.url} className="btn btn-outline work-btn" target="_blank" rel="noreferrer">
-            制作物を見る →
+            制作物を見る <FaArrowRight />
           </a>
         </div>
       )}

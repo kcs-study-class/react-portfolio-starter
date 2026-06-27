@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import type { ReactNode } from 'react'
 
 interface Props {
   src: string | null
   alt: string
   className?: string
-  fallback: string
+  fallback: ReactNode
 }
 
 export default function SafeImg({ src, alt, className, fallback }: Props) {

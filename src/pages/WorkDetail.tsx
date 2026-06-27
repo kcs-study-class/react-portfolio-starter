@@ -1,9 +1,16 @@
 import { useParams, Link, Navigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import {
+  FaArrowLeft,
+  FaGithub,
+  FaArrowUpRightFromSquare,
+  FaImage,
+  FaLocationDot,
+} from 'react-icons/fa6'
+import {
   works,
-  CATEGORY_EMOJI,
-  CATEGORY_EMOJI_FALLBACK,
+  CATEGORY_ICON,
+  CATEGORY_ICON_FALLBACK,
 } from '../data/portfolio'
 import SafeImg from '../components/SafeImg'
 
@@ -31,17 +38,17 @@ export default function WorkDetail() {
 
   if (!work) return <Navigate to="/" replace />
 
-  const categoryEmoji = CATEGORY_EMOJI[work.category] ?? CATEGORY_EMOJI_FALLBACK
+  const CategoryIcon = CATEGORY_ICON[work.category] ?? CATEGORY_ICON_FALLBACK
 
   return (
     <div className="wd-page">
       <div className="container">
 
-        <Link to="/#works" className="wd-back">← 作品一覧に戻る</Link>
+        <Link to="/#works" className="wd-back"><FaArrowLeft /> 作品一覧に戻る</Link>
 
         <div className="wd-hero">
           <div className="wd-hero-thumbnail">
-            <SafeImg src={work.thumbnail} alt={work.title} fallback={categoryEmoji} />
+            <SafeImg src={work.thumbnail} alt={work.title} fallback={<CategoryIcon />} />
           </div>
           <div className="wd-hero-info">
             <p className="work-category-badge">{work.genre}</p>
@@ -55,12 +62,12 @@ export default function WorkDetail() {
             <div className="wd-hero-links">
               {work.github && (
                 <a href={work.github} className="btn btn-outline" target="_blank" rel="noreferrer">
-                  GitHub →
+                  <FaGithub /> GitHub
                 </a>
               )}
               {work.link && (
                 <a href={work.link} className="btn btn-primary" target="_blank" rel="noreferrer">
-                  Live Demo →
+                  <FaArrowUpRightFromSquare /> Live Demo
                 </a>
               )}
             </div>
@@ -71,7 +78,7 @@ export default function WorkDetail() {
           <Section title="スクリーンショット">
             <div className="wd-screenshots">
               {work.screenshots.map((src, i) => (
-                <SafeImg key={i} src={src} alt={`${work.title} screenshot ${i + 1}`} className="wd-screenshot-img" fallback="🖼" />
+                <SafeImg key={i} src={src} alt={`${work.title} screenshot ${i + 1}`} className="wd-screenshot-img" fallback={<FaImage />} />
               ))}
             </div>
           </Section>
@@ -90,7 +97,7 @@ export default function WorkDetail() {
               <div className="wd-venues-list">
                 {work.venues.map((v, i) => (
                   <div key={i} className="wd-venue-item">
-                    <span className="wd-venue-icon">📍</span>
+                    <span className="wd-venue-icon"><FaLocationDot /></span>
                     <span className="wd-venue-name">{v.name}</span>
                     <span className="wd-venue-date">{v.date}</span>
                   </div>

@@ -57,6 +57,9 @@
 
 /* 受賞・順位バッジ(黄色) */
 .jam-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 0.78rem;
   font-weight: 700;
   color: #fbbf24;
