@@ -10,7 +10,7 @@ export interface Profile {
   avatar: string | null
   links: {
     github: string
-    twitter: string
+    twitter: string | null
     email: string
   }
 }

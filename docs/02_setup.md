@@ -117,6 +117,19 @@ npm install react-router-dom
 
 ---
 
+## react-icons のインストール
+
+Contact セクションなどで使う、GitHub / X / メールなどのブランドアイコンを表示するために使います。
+
+```bash
+npm install react-icons
+```
+
+絵文字と違って OS やフォントに依存せず、どの環境でも同じ見た目で表示できます。
+SVG なので `fill="currentColor"` で文字色を継承し、サイズも `1em` で自動的に揃います。
+
+---
+
 ## `tsconfig.json` について
 
 `npm create vite` で TypeScript を選ぶと、TypeScript の設定ファイル `tsconfig.json` がプロジェクト直下に自動生成されます。  

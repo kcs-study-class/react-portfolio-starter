@@ -29,7 +29,7 @@ export interface Profile {
   avatar: string | null      // null = プレースホルダー表示
   links: {
     github: string
-    twitter: string
+    twitter: string | null   // null = リンク非表示
     email: string
   }
 }

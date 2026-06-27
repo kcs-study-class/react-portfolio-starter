@@ -825,16 +825,19 @@ export default function Certifications() {
 ## Contact — 連絡先
 
 外部リンクと `mailto:` で挙動を変える小さな工夫が入っています。
+アイコンには [react-icons](https://react-icons.github.io/react-icons/) の公式ブランドロゴ（`fa6`）を使っています。
 
 ```tsx
 // src/components/Contact.tsx
+import type { ReactNode } from 'react'
+import { FaGithub, FaXTwitter, FaEnvelope } from 'react-icons/fa6'
 import { profile } from '../data/portfolio'
 
 export default function Contact() {
-  const links = [
-    { label: 'GitHub',      icon: '🐙', href: profile.links.github },
-    { label: 'Twitter / X', icon: '🐦', href: profile.links.twitter },
-    { label: 'Email',       icon: '✉️', href: `mailto:${profile.links.email}` },
+  const links: { label: string; icon: ReactNode; href: string | null }[] = [
+    { label: 'GitHub',      icon: <FaGithub />,   href: profile.links.github },
+    { label: 'Twitter / X', icon: <FaXTwitter />, href: profile.links.twitter },
+    { label: 'Email',       icon: <FaEnvelope />, href: `mailto:${profile.links.email}` },
   ]
 
   return (
@@ -852,18 +855,20 @@ export default function Contact() {
           </p>
 
           <div className="contact-links">
-            {links.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="contact-link-item"
-                target={link.href.startsWith('mailto') ? undefined : '_blank'}
-                rel="noreferrer"
-              >
-                <span className="contact-link-icon">{link.icon}</span>
-                {link.label}
-              </a>
-            ))}
+            {links
+              .filter((link): link is typeof link & { href: string } => link.href !== null)
+              .map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="contact-link-item"
+                  target={link.href.startsWith('mailto') ? undefined : '_blank'}
+                  rel="noreferrer"
+                >
+                  <span className="contact-link-icon">{link.icon}</span>
+                  {link.label}
+                </a>
+              ))}
           </div>
         </div>
       </div>
@@ -875,6 +880,9 @@ export default function Contact() {
 **ポイント**:
 - `mailto:` リンクを新しいタブで開くのは UX 的に不自然なので、`startsWith('mailto')` で判定して `target` を切り替えています
 - `target` に `undefined` を渡すと **属性自体が出力されません**。空文字列 `""` を渡すのとは違う挙動なので注意
+- アイコンは絵文字ではなく react-icons のコンポーネント（JSX）なので、`links` の `icon` は `string` ではなく `ReactNode` で型付けしています
+- react-icons は `fill="currentColor"`・`1em` サイズで描画されるため、文字色とサイズを継承します（ホバー時のアクセントカラーにも追従）
+- `twitter` は `string | null` 型です。`null`（アカウント未設定）の場合は `.filter()` でリンクごと除外し、`href={null}` の壊れたリンクが出ないようにしています。`link is typeof link & { href: string }` という **型ガード** で、`filter` 後の `link.href` を `string` に絞り込んでいます
 
 ---
 

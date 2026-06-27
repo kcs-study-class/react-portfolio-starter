@@ -260,7 +260,7 @@ src/
 .contact-desc      説明テキスト
 .contact-links     リンクボタンを横並びにするFlexコンテナ
 .contact-link-item 各連絡先リンク（ボーダーカード形式）
-.contact-link-icon アイコン絵文字
+.contact-link-icon アイコン（react-icons のSVG）
 ```
 
 ---

@@ -1,10 +1,12 @@
+import type { ReactNode } from 'react'
+import { FaGithub, FaXTwitter, FaEnvelope } from 'react-icons/fa6'
 import { profile } from '../data/portfolio'
 
 export default function Contact() {
-  const links = [
-    { label: 'GitHub', icon: '🐙', href: profile.links.github },
-    { label: 'Twitter / X', icon: '🐦', href: profile.links.twitter },
-    { label: 'Email', icon: '✉️', href: `mailto:${profile.links.email}` },
+  const links: { label: string; icon: ReactNode; href: string | null }[] = [
+    { label: 'GitHub', icon: <FaGithub />, href: profile.links.github },
+    { label: 'Twitter / X', icon: <FaXTwitter />, href: profile.links.twitter },
+    { label: 'Email', icon: <FaEnvelope />, href: `mailto:${profile.links.email}` },
   ]
 
   return (
@@ -24,18 +26,20 @@ export default function Contact() {
           </p>
 
           <div className="contact-links">
-            {links.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="contact-link-item"
-                target={link.href.startsWith('mailto') ? undefined : '_blank'}
-                rel="noreferrer"
-              >
-                <span className="contact-link-icon">{link.icon}</span>
-                {link.label}
-              </a>
-            ))}
+            {links
+              .filter((link): link is typeof link & { href: string } => link.href !== null)
+              .map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="contact-link-item"
+                  target={link.href.startsWith('mailto') ? undefined : '_blank'}
+                  rel="noreferrer"
+                >
+                  <span className="contact-link-icon">{link.icon}</span>
+                  {link.label}
+                </a>
+              ))}
           </div>
         </div>
       </div>
