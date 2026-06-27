@@ -98,7 +98,7 @@ export const profile: Profile = {
   school: '◯◯専門学校',
   department: 'ゲームクリエイター科',
   graduationYear: '2027年3月卒業見込み',
-  bio: 'ゲームが好きで専門学校に入学。Unity・Unreal Engine を使ったゲーム開発と、Webフロントエンド技術を学んでいます。ユーザーが「楽しい！」と感じる体験を作ることが目標です。',
+  bio: 'ゲームが好きで専門学校に入学。\nUnity・Unreal Engine を使ったゲーム開発と、Webフロントエンド技術を学んでいます。\nユーザーが「楽しい！」と感じる体験を作ることが目標です。',
   motto: '信頼は、積むもの',
   avatar: null,
   links: {

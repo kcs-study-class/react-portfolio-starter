@@ -34,6 +34,7 @@
   line-height: 1.9;
   color: var(--color-text-muted);
   margin-bottom: 24px;
+  white-space: pre-line; /* bio 内の \n を改行として表示する */
 }
 
 /* 学校情報エリア（カード内区切り） */
