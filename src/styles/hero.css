@@ -172,6 +172,7 @@
   width: 140px;
   height: 140px;
   border-radius: 50%; /* 完全な円形にする */
+  border: 4px solid rgba(255, 255, 255, 0.2); /* 丸い縁取り */
   background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
   display: flex;
   align-items: center;
