@@ -57,6 +57,31 @@ git push
 # → Vercel が自動でデプロイ
 ```
 
+### （任意）パスワードでアクセス制限する
+
+公開前の確認用などで「URL を知っていてもパスワードが無いと見られない」状態にしたい場合、
+ルートの `middleware.ts`（Vercel Edge Middleware）で Basic 認証をかけられます。**無料の Hobby プランでも動作**します。
+
+> Vercel 公式の「Password Protection」はトグルだけで使えますが、Pro の有料アドオン（月額制）です。
+> 個人サイトなら下記の自前 middleware が手軽でおすすめです。
+
+仕組みはリポジトリの [`middleware.ts`](../middleware.ts) を参照。パスワードは **コードに書かず**、Vercel の環境変数で設定します。
+
+1. Vercel ダッシュボード → 対象プロジェクト → **Settings → Environment Variables**
+2. 以下を追加（`SITE_USER` は省略可。未設定時は `portfolio`）：
+
+   | Key | Value（例） |
+   |-----|------|
+   | `SITE_PASSWORD` | 好きなパスワード |
+   | `SITE_USER` | 好きなユーザー名（任意） |
+
+3. 保存後、再デプロイすると全ページで Basic 認証のログインダイアログが出ます。
+
+**ポイント・注意**:
+- ローカルの `npm run dev`（Vite）では middleware は動かないため、開発はパスワード無しのままできます（Vercel 上でのみ有効）。
+- `SITE_PASSWORD` を **未設定のままにすると安全側に倒して全ページ 401** になります（誤って全公開しない設計）。制限を解除したいときは middleware を消すか matcher を調整してください。
+- Basic 認証のパスワードは Base64（暗号化ではない）ですが、Vercel は常時 HTTPS なので通信自体は暗号化されます。「WIP を一般公開から隠す」用途には十分です。
+
 ---
 
 ## 3. GitHub Pages で公開する場合
